@@ -330,7 +330,7 @@ int main()
      * Look in that directory to find all the rest.
      */
 
-    // lv_ex_get_started_1();
+   //  lv_ex_get_started_1();
     // lv_ex_get_started_2();
     // lv_ex_get_started_3();
 
@@ -374,7 +374,7 @@ int main()
     // lv_example_arc_1();
     // lv_example_arc_2();
 
-  //  lv_example_bar_1();          // ok
+   // lv_example_bar_1();          // ok
     // lv_example_bar_2();
     // lv_example_bar_3();
     // lv_example_bar_4();
@@ -427,7 +427,7 @@ int main()
 
     // lv_example_list_1();
 
-     lv_example_meter_1();
+   // lv_example_meter_1();
     // lv_example_meter_2();
     // lv_example_meter_3();
     // lv_example_meter_4();       // ok
@@ -481,7 +481,7 @@ int main()
 //lcdScreen = lcd;
 
 
-AquaHMI_Init();
+    AquaHMI_Init();
     while (!lv_win32_quit_signal)
     {
         lv_task_handler();

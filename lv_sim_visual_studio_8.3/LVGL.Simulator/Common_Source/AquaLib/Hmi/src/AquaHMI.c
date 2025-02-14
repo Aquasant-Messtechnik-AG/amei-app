@@ -935,65 +935,11 @@ UnitState AquaHMI_Init() {
     absMinAmp1 = 0xFFFFFFFF;
     absMaxAmp1 = 0;
 
-    lv_obj_t* display_img = lv_img_create(lv_scr_act());
-
-    lv_img_set_src(display_img, &AMEI_Display);
-
-    lv_obj_align(display_img, LV_ALIGN_CENTER, 0, -150);
-
-    lv_obj_t* lcd = lv_obj_create(display_img);
-    float scale_x = 1;
-    float scale_y = 1;
-    lv_obj_set_size(lcd, 128 * scale_x, 64 * scale_y);
-
-    lv_obj_align(lcd, LV_ALIGN_CENTER, 0, 0);
-
-
-    /* Create buttons for simulator */
-    lv_obj_t* btn0 = lv_btn_create(display_img);
-    lv_obj_t* btn1 = lv_btn_create(display_img);
-    lv_obj_t* btn2 = lv_btn_create(display_img);
-
-
-    lv_obj_add_style(btn0, &styleButtonSim, 0);
-    lv_obj_add_style(btn1, &styleButtonSim, 0);
-    lv_obj_add_style(btn2, &styleButtonSim, 0);
-
-    lv_obj_set_size(btn0, 30, 30);
-    lv_obj_align(btn0, LV_ALIGN_CENTER, 0, 50);
-    lv_obj_set_size(btn1, 30, 30);
-    lv_obj_align(btn1, LV_ALIGN_CENTER, -128 / 4 - 5, 50);
-    lv_obj_set_size(btn2, 30, 30);
-    lv_obj_align(btn2, LV_ALIGN_CENTER, 128 / 4 + 5, 50);
-
-
-    /* Pass buttons addresses to simulated FW */
-    setDownButtonAddress(btn0);
-    setEscButtonAddress(btn1);
-    setEnterButtonAddress(btn2);
-
-    lvgl_sim_group = lv_group_create();
-
-
-
     sim_init_staticData();
-    lvgl_initControllPanel();
+  //  lvgl_initControllPanel();
 
 
-    lv_disp_drv_init(&disp_drv);
-
-    /* init disp frame buffer by lvgl lib */
-    lv_disp_draw_buf_init(&disp_buf, buf_1, buf_2, (64 * 128) / 8);
-    /* configure disp driver */
-    disp_drv.draw_buf = &disp_buf;
-
-    //    disp_drv.rounder_cb=st7565_rounder;
-    disp_drv.hor_res = 128; /*Set the horizontal resolution in pixels*/
-    disp_drv.ver_res = 64; /*Set the vertical resolution in pixels*/
-    lv_disp_t* disp;
-    disp = lv_disp_drv_register(&disp_drv); /*Register the driver and save the created display objects*/
-
-
+ 
     AquaHMI_styles_init();
     AquaHMI_GUI_init();
     loadMenuChain();
