@@ -427,7 +427,7 @@ int main()
 
     // lv_example_list_1();
 
-   //  lv_example_meter_1();
+     lv_example_meter_1();
     // lv_example_meter_2();
     // lv_example_meter_3();
     // lv_example_meter_4();       // ok
