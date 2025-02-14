@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file lv_conf.h
  * Configuration file for v8.3.4
  */
@@ -11,6 +11,8 @@
  *    - add the path as include path
  */
 
+#define LV_LVGL_H_INCLUDE_SIMPLE 1
+
 /* clang-format off */
 #if 1 /*Set it to "1" to enable content*/
 
@@ -22,6 +24,10 @@
 /*====================
    COLOR SETTINGS
  *====================*/
+#define TITLE "AMEI Simulator"
+#define VERSION " "
+
+#define WINDOWS_NAME TITLE VERSION
 
 /*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
 #define LV_COLOR_DEPTH 32
@@ -380,20 +386,54 @@
 
 /*Pixel perfect monospace fonts*/
 #define LV_FONT_UNSCII_8  1
-#define LV_FONT_UNSCII_16 0
+#define LV_FONT_UNSCII_16 1
 
 /*Optionally declare custom fonts here.
  *You can use these fonts as default font too and they will be available globally.
  *E.g. #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)*/
-#define LV_FONT_CUSTOM_DECLARE
 
-/*Always set a default font*/
-#define LV_FONT_DEFAULT &lv_font_montserrat_14
+#define DEJAVU 1
+#define UNSCII 1
+#if DEJAVU
+#define DEJAVU_STR "DEJAVU "
+#endif
+#if UNSCII
+#define UNSCII_STR "UNSCII"
+#endif
+/*Optionally declare custom fonts here.
+ *You can use these fonts as default font too and they will be available globally.
+ *E.g. #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)*/
+
+/*   LV_FONT_DECLARE(DejaVuSansMono_8)  \
+  LV_FONT_DECLARE(DejaVuSansMono_6)  \ */
+#define LV_FONT_CUSTOM_DECLARE   \
+	LV_FONT_DECLARE(font_Symbols_7)  \
+	LV_FONT_DECLARE(font_Symbols_8)  \
+	LV_FONT_DECLARE(font_Symbols_10)  \
+  LV_FONT_DECLARE(font_Symbols_12)  \
+  LV_FONT_DECLARE(font_Symbols_16)  \
+  LV_FONT_DECLARE(font_Symbols_20)  \
+    LV_FONT_DECLARE(font_Symbols_28)  \
+	    LV_FONT_DECLARE(font_Symbols_30) \
+  LV_FONT_DECLARE(DejaVuSansMono_6)  \
+    LV_FONT_DECLARE(DejaVuSansMono_7)  \
+  LV_FONT_DECLARE(DejaVuSansMono_8)  \
+    LV_FONT_DECLARE(DejaVuSans_9) \
+  LV_FONT_DECLARE(DejaVuSans_10) \
+  LV_FONT_DECLARE(DejaVuSans_15)  \
+  LV_FONT_DECLARE(DejaVuSans_20) \
+    LV_FONT_DECLARE(DejaVuSans_30) \
+  LV_FONT_DECLARE(DejaVuSans_28)
+
+
+
+
+#define LV_FONT_DEFAULT        &DejaVuSansMono_8 //lv_font_montserrat_10     /*Always set a default font from the built-in fonts*/
 
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
  *Compiler error will be triggered if a font needs it.*/
-#define LV_FONT_FMT_TXT_LARGE 0
+#define LV_FONT_FMT_TXT_LARGE 1
 
 /*Enables/disables support for compressed fonts.*/
 #define LV_USE_FONT_COMPRESSED 1

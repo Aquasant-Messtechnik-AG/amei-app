@@ -9,7 +9,7 @@
  */
 
 #include <Windows.h>
-
+#include <AquaHMI.h>
 #include "resource.h"
 
 #if _MSC_VER >= 1200
@@ -313,7 +313,7 @@ int main()
     // Demos from lv_examples
     // ----------------------------------
 
-    //lv_demo_widgets();           // ok
+   // lv_demo_widgets();           // ok
     //lv_demo_benchmark();
     // lv_demo_keypad_encoder();    // ok
     // lv_demo_music();             // removed from repository
@@ -374,7 +374,7 @@ int main()
     // lv_example_arc_1();
     // lv_example_arc_2();
 
-    // lv_example_bar_1();          // ok
+  //  lv_example_bar_1();          // ok
     // lv_example_bar_2();
     // lv_example_bar_3();
     // lv_example_bar_4();
@@ -427,7 +427,7 @@ int main()
 
     // lv_example_list_1();
 
-    // lv_example_meter_1();
+   //  lv_example_meter_1();
     // lv_example_meter_2();
     // lv_example_meter_3();
     // lv_example_meter_4();       // ok
@@ -437,9 +437,9 @@ int main()
     // lv_example_obj_1();         // ok
 
     // lv_example_roller_1();
-    // lv_example_roller_2();      // ok
+    //lv_example_roller_2();      // ok
 
-    // lv_example_slider_1();      // ok
+    //lv_example_slider_1();      // ok
     // lv_example_slider_2();      // issues
     // lv_example_slider_3();      // issues
 
@@ -460,12 +460,28 @@ int main()
 
     // lv_example_tileview_1();    // ok
 
-    // lv_example_win_1();         // ok
+   //  lv_example_win_1();         // ok
 
     // ----------------------------------
     // Task handler loop
     // ----------------------------------
 
+//lv_obj_t* display_img = lv_img_create(lv_scr_act());
+//
+//lv_img_set_src(display_img, &AMEI_Display);
+//
+//lv_obj_align(display_img, LV_ALIGN_CENTER, 0, -150);
+//
+//lv_obj_t* lcd = lv_obj_create(display_img);
+//float scale_x = 1;
+//float scale_y = 1;
+//lv_obj_set_size(lcd, 128 * scale_x, 64 * scale_y);
+//
+//lv_obj_align(lcd, LV_ALIGN_CENTER, 0, 0);
+//lcdScreen = lcd;
+
+
+AquaHMI_Init();
     while (!lv_win32_quit_signal)
     {
         lv_task_handler();

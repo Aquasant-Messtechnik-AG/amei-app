@@ -16,7 +16,7 @@
   <Import Project="Mile.Project.Windows.Legacy\Mile.Project.Cpp.props" />
   <Import Project="freetype.props" />
   <PropertyGroup>
-    <IncludePath>$(MSBuildThisFileDirectory);$(IncludePath)</IncludePath>
+    <IncludePath>C:\AquaSim\AqSim\ori\amei-app-main\lv_sim_visual_studio_8.3\LVGL.Simulator\Common_Source\AquaLib\Hmi\inc;C:\AquaSim\Work\amei-app-main\lv_sim_visual_studio_8.3\LVGL.Simulator\lvgl;C:\AquaSim\Work\amei-app-main\lv_sim_visual_studio_8.3\LVGL.Simulator\Common_Source\AquaLib\inc;C:\AquaSim\Work\amei-app-main\lv_sim_visual_studio_8.3\LVGL.Simulator\Common_Source\AquaLib\Hmi\inc;$(MSBuildThisFileDirectory);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -720,6 +720,42 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)lv_drivers\wayland\wayland.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lv_drivers\win32drv\win32drv.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)lv_drivers\win_drv.c" />
+    <ClCompile Include="Common_Source\AquaLib\Hmi\src\AquaHMI.c" />
+    <ClCompile Include="Common_Source\AquaLib\Hmi\src\AquaHMIMenuDefinitions.c" />
+    <ClCompile Include="Common_Source\AquaLib\Hmi\src\AquaMultiLanguages.c" />
+    <ClCompile Include="Common_Source\AquaLib\src\AquaTypes.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSansMono_6.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSansMono_7.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSansMono_8.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_10.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_12.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_15.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_18.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_20.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_25.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_28.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_30.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_34.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_4.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_40.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_6.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_8.c" />
+    <ClCompile Include="Fonts\fonts_c\DejaVuSans_9.c" />
+    <ClCompile Include="Fonts\fonts_c\font_NamurSymbols.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_10.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_12.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_16.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_18.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_20.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_24.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_28.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_30.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_5.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_6.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_7.c" />
+    <ClCompile Include="Fonts\fonts_c\font_Symbols_8.c" />
+    <ClCompile Include="Images\images_c\AMEI_Display.c" />
+    <ClCompile Include="Images\images_c\Logo_Aquasant_100x25.c" />
     <ClCompile Include="LVGL.Simulator.cpp" />
   </ItemGroup>
   <ItemGroup>
