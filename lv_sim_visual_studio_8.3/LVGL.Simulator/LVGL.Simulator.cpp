@@ -9,6 +9,7 @@
  */
 
 #include <Windows.h>
+#include <conio.h>
 #include <AquaHMI.h>
 #include "resource.h"
 
@@ -22,7 +23,7 @@
 #endif
 
 #include "lvgl/lvgl.h"
-#include "lvgl/examples/lv_examples.h"
+
 #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/win32drv/win32drv.h"
 
@@ -480,10 +481,35 @@ int main()
 //lv_obj_align(lcd, LV_ALIGN_CENTER, 0, 0);
 //lcdScreen = lcd;
 
+    lv_obj_t* display_img = lv_img_create(lv_scr_act());
 
+    //lv_obj_set_size(display_img, 128, 64);
+
+
+    lv_obj_align(display_img, LV_ALIGN_CENTER, 0, 0);
+
+    lv_obj_t* lcd = lv_obj_create(display_img);
+    /* Create buttons for simulator */
+    lv_obj_t* btn0 = lv_btn_create(display_img);
+    lv_obj_t* btn1 = lv_btn_create(display_img);
+    lv_obj_t* btn2 = lv_btn_create(display_img);
+
+    lv_obj_set_size(btn0, 30, 30);
+    lv_obj_align(btn0, LV_ALIGN_CENTER, 0, 50);
+    lv_obj_set_size(btn1, 30, 30);
+    lv_obj_align(btn1, LV_ALIGN_CENTER, -128 / 4 - 5, 50);
+    lv_obj_set_size(btn2, 30, 30);
+    lv_obj_align(btn2, LV_ALIGN_CENTER, 128 / 4 + 5, 50);
+
+    ///* Pass buttons addresses to simulated FW */
+    setDownButtonAddress(btn0);
+    setEscButtonAddress(btn1);
+    setEnterButtonAddress(btn2);
     AquaHMI_Init();
+
     while (!lv_win32_quit_signal)
     {
+
         lv_task_handler();
         Sleep(1);
     }

@@ -16,8 +16,6 @@
  *********************/
 
 
-
-
 #include <AquaHMI.h>
 #include <time.h>
 
@@ -359,11 +357,9 @@ static sliders_t sliderStates;
 static uint8_t configurationInFocus;  /* Contains the current configuration in focus */
 static uint8_t configurationActive;  /* Contains the current configuration in focus */
 static uint8_t mediumInFocus;         /* Contains the current medium in focus */
-static modConfigDataStruct_t sim_modConfig;
+
 
 static hmiConfigDataStruct_t sim_hmiConfig;
-
-static measConfigDataStruct_t sim_measConfig;
 
 static nodeDescriptor_t *menuChainArray[MENU_CHAIN_SIZE];
 
@@ -626,7 +622,6 @@ static void updateHeaderInformations(lv_group_t *e);
 static void updateHeaderInformationsFromNode(nodeDescriptor_t *node);
 static lv_obj_t* memoryUsedDisplay;
 
-static modConfigDataStruct_t sim_modConfig;
 
 static measConfigDataStruct_t sim_measConfig;
 
@@ -666,19 +661,15 @@ static void modRangeSlider_event_cb(lv_event_t* e) {
 
 
 
-        sim_modConfig.minInputValue = (float)lv_slider_get_left_value(obj);
-        sim_modConfig.maxInputValue = (float)lv_slider_get_value(obj);
-        //      if(sim_modConfig.activeType==curSink){
-        sim_modConfig.transformFactor = (float)((sim_modConfig.maxModValue - sim_modConfig.minModValue) / ((float)((uint32_t)sim_modConfig.maxInputValue - (uint32_t)sim_modConfig.minInputValue)));
+        modConfig.minInputValue = (float)lv_slider_get_left_value(obj);
+        modConfig.maxInputValue = (float)lv_slider_get_value(obj);
+        //      if(modConfig.activeType==curSink){
+        modConfig.transformFactor = (float)((modConfig.maxModValue - modConfig.minModValue) / ((float)((uint32_t)modConfig.maxInputValue - (uint32_t)modConfig.minInputValue)));
         //      }
 
     }
 }
 
-
-
-static const char* namur_btnm_map[] = { LV_SYMBOL_NAMUR_V2_CHECK,LV_SYMBOL_NAMUR_V2_CHECKED,LV_SYMBOL_NAMUR_V2_UNCHECKED,LV_SYMBOL_NAMUR_V2_FAULT,
-        LV_SYMBOL_NAMUR_V2_MAINTENENCE,LV_SYMBOL_NAMUR_V2_OUT_OF_RANGE,"" };
 lv_group_t* lvgl_sim_group;
 lv_style_t  styleButtonSim;
 
@@ -737,148 +728,6 @@ static void sysTempValueSlider_event_cb(lv_event_t* e) {
     }
 }
 
-void measValueSlider_event_cb(lv_event_t* e)
-{
-}
-
-static void probeRangeSlider_event_cb(lv_event_t* e);
-
-static void modRangeSlider_event_cb(lv_event_t* e);
-static void sysTempValueSlider_event_cb(lv_event_t* e);
-
-
-
-
-
-static void lvgl_initControllPanel(void) {
-
-    lv_obj_t* slider;
-    lv_obj_t* label;
-    lv_obj_t* content = lv_obj_create(lv_scr_act());
-    char smallBuffer[100];
-
-    //  lv_obj_add_style(cont, , selector)
-    lv_obj_set_size(content, LV_HOR_RES, 250);
-    lv_obj_align_to(content, lv_scr_act(), LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_update_layout(content);
-
-    /* NAMUR btn matrix */
-
-    lv_obj_t* btnm1 = lv_btnmatrix_create(content);
-    lv_obj_set_size(btnm1, 290, 30);
-    lv_obj_add_style(btnm1, &styleNamurFontSim, 0);
-    lv_obj_add_style(btnm1, &styleNamurFontSimInv, LV_EVENT_CLICKED);
-    lv_btnmatrix_set_map(btnm1, namur_btnm_map);
-
-    for (uint8_t i = 0; i < 6; i++) {//     for(uint8_t i=0;i<lv_obj_get_child_cnt(btnm1);i++){
-        lv_btnmatrix_set_btn_ctrl(btnm1, i, LV_BTNMATRIX_CTRL_CHECKABLE);
-    }
-    lv_obj_align_to(btnm1, content, LV_ALIGN_TOP_RIGHT, 0, 0);
-
-    char key = LV_KEY_RIGHT;
-    lv_btnmatrix_set_selected_btn(btnm1, 1);
-    lv_event_send(btnm1, LV_EVENT_PRESSED, &key);
-
-
-
-    /*Create a slider in the center of the display*/
-    lv_obj_t* sysTempValueGroup = lv_obj_create(content);
-    lv_obj_set_size(sysTempValueGroup, 290, 40);
-    lv_obj_align_to(sysTempValueGroup, btnm1, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
-    label = lv_label_create(sysTempValueGroup);
-    lv_label_set_text(label, "System temperatur");
-    lv_obj_align(label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_t* sliderSysTempValue = lv_slider_create(sysTempValueGroup);
-    //    lv_obj_center(ProbeRangeGroup);
-    lv_obj_set_height(sliderSysTempValue, 4);
-    lv_obj_align(sliderSysTempValue, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_slider_set_mode(sliderSysTempValue, LV_SLIDER_MODE_NORMAL);
-    lv_bar_set_range(sliderSysTempValue, -50, 100);
-    lv_slider_set_value(sliderSysTempValue, 0, LV_ANIM_OFF);
-    //      lv_slider_set_left_value(sliderMeasValue, lv_slider_get_max_value(sliderMeasValue)/100*20, LV_ANIM_OFF);
-
-    lv_obj_add_event_cb(sliderSysTempValue, sysTempValueSlider_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_refresh_ext_draw_size(sliderSysTempValue);
-
-
-    /*Create a slider in the center of the display*/
-    lv_obj_t* memValueGroup = lv_obj_create(content);
-    lv_obj_set_size(memValueGroup, 290, 40);
-    lv_obj_align_to(memValueGroup, btnm1, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
-
-    label = lv_label_create(memValueGroup);
-    lv_label_set_text(label, "System memory");
-
-    memoryUsedDisplay = lv_label_create(memValueGroup);
-    setUsedMemoryAddress(memoryUsedDisplay);
-
-    lv_obj_align(memoryUsedDisplay, LV_ALIGN_TOP_LEFT, 0, 20);
-
-
-    /*Create a slider in the center of the display*/
-    lv_obj_t* ProbeAdjustGroup = lv_obj_create(content);
-    lv_obj_set_size(ProbeAdjustGroup, 290, 40);
-    lv_obj_align_to(ProbeAdjustGroup, content, LV_ALIGN_TOP_LEFT, 0, 0);
-    label = lv_label_create(ProbeAdjustGroup);
-    lv_label_set_text(label, "Null/Nassabgleich");
-    lv_obj_align(label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_t* sliderProbeAdjustZeroFull = lv_slider_create(ProbeAdjustGroup);
-    //    lv_obj_center(ProbeRangeGroup);
-    lv_obj_set_height(sliderProbeAdjustZeroFull, 4);
-    lv_obj_align(sliderProbeAdjustZeroFull, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_slider_set_mode(sliderProbeAdjustZeroFull, LV_SLIDER_MODE_RANGE);
-    lv_bar_set_range(sliderProbeAdjustZeroFull, 0, 1000000);
-    lv_slider_set_value(sliderProbeAdjustZeroFull, sim_measConfig.probeMaxRawValue, LV_ANIM_OFF);
-    lv_slider_set_left_value(sliderProbeAdjustZeroFull, sim_measConfig.probeMinRawValue, LV_ANIM_OFF);
-
-    //  lv_obj_add_event_cb(sliderProbeAdjustZeroFull, probeRangeSlider_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_refresh_ext_draw_size(sliderProbeAdjustZeroFull);
-
-
-
-
-
-    /*Create a slider in the center of the display*/
-    lv_obj_t* spreadRangeGroup = lv_obj_create(content);
-    lv_obj_set_size(spreadRangeGroup, 290, 40);
-    lv_obj_align_to(spreadRangeGroup, ProbeAdjustGroup, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
-    label = lv_label_create(spreadRangeGroup);
-    lv_label_set_text(label, "Spreizung 4/20mA");
-
-    lv_obj_align(label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_update_layout(label);
-
-    lv_obj_t* sliderSpreadRange = lv_slider_create(spreadRangeGroup);
-    lv_obj_set_height(sliderSpreadRange, 4);
-    lv_obj_align(sliderSpreadRange, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_bar_set_range(sliderSpreadRange, 0, 100.00);// sim_measConfig.probeMinRawValue, sim_measConfig.probeMaxRawValue);
-    lv_slider_set_mode(sliderSpreadRange, LV_SLIDER_MODE_RANGE);
-    lv_slider_set_value(sliderSpreadRange, sim_measConfig.rangeMaxRawValue, LV_ANIM_OFF);
-    lv_slider_set_left_value(sliderSpreadRange, sim_measConfig.rangeMinRawValue, LV_ANIM_OFF);
-
-    lv_obj_add_event_cb(sliderSpreadRange, modRangeSlider_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_refresh_ext_draw_size(sliderSpreadRange);
-
-    /*Create a slider in the center of the display*/
-    lv_obj_t* measValueGroup = lv_obj_create(content);
-    lv_obj_set_size(measValueGroup, 290, 40);
-    lv_obj_align_to(measValueGroup, spreadRangeGroup, LV_ALIGN_OUT_BOTTOM_MID, 0, 3);
-    label = lv_label_create(measValueGroup);
-    lv_label_set_text(label, "Measurement Value");
-    lv_obj_align(label, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_t* sliderMeasValue = lv_slider_create(measValueGroup);
-
-    lv_obj_set_height(sliderMeasValue, 4);
-    lv_obj_align(sliderMeasValue, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_slider_set_mode(sliderMeasValue, LV_SLIDER_MODE_NORMAL);
-    lv_bar_set_range(sliderMeasValue, lv_slider_get_min_value(sliderProbeAdjustZeroFull), lv_slider_get_max_value(sliderProbeAdjustZeroFull));
-    lv_slider_set_value(sliderMeasValue, sim_measConfig.rangeMinRawValue, LV_ANIM_OFF);
-
-    lv_obj_add_event_cb(sliderMeasValue, measValueSlider_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_refresh_ext_draw_size(sliderMeasValue);
-
-    // setModSliderAddress(sliderSpreadRange);
-}
 
 static void   sim_init_staticData(void) {
 
@@ -911,14 +760,16 @@ static void   sim_init_staticData(void) {
     sim_hmiConfig.mainDispCfg.chartUnit[1] = unitsmAmps;
 
 
-    sim_modConfig.maxInputValue = (uint32_t)sim_measConfig.probeMaxRawValue;
-    sim_modConfig.maxModValue = 20000;
-    sim_modConfig.minInputValue = (uint32_t)sim_measConfig.probeMinRawValue;
-    sim_modConfig.minModValue = 4000;
-    sim_modConfig.transformFactor = ((sim_modConfig.maxModValue - sim_modConfig.minModValue) /
-        ((float)(sim_modConfig.maxInputValue - sim_modConfig.minInputValue)));
+    modConfig.maxInputValue = (uint32_t)sim_measConfig.probeMaxRawValue;
+    modConfig.maxModValue = 20000;
+    modConfig.minInputValue = (uint32_t)sim_measConfig.probeMinRawValue;
+    modConfig.minModValue = 4000;
+    modConfig.transformFactor = ((modConfig.maxModValue - modConfig.minModValue) /
+        ((float)(modConfig.maxInputValue - modConfig.minInputValue)));
 
     sim_measDataSet.ampDiffLin = sim_measConfig.rangeMinRawValue;
+
+ 
 
 }
 
@@ -936,13 +787,11 @@ UnitState AquaHMI_Init() {
     absMaxAmp1 = 0;
 
     sim_init_staticData();
-  //  lvgl_initControllPanel();
 
-
- 
     AquaHMI_styles_init();
-    AquaHMI_GUI_init();
+
     loadMenuChain();
+    AquaHMI_GUI_init();
     loadNavigation();
     loadProcessFlowPointers();
 
@@ -952,8 +801,6 @@ UnitState AquaHMI_Init() {
     /*-----------------------------------------------------------------------------------------------------------------/
      Init Display
      ------------------------------------------------------------------------------------------------------------------*/
-
-
 
 
 
@@ -2543,7 +2390,7 @@ static void enableNextMediumInArray(uint8_t arrayIndex) {
 }
 
 static uint8_t setParameterValue(STR parameterID, char* parameterString) {
-    modConfigDataStruct_t * modConfig;
+
     uint8_t result = true;
     float valueFloat;
     float valueInt;
@@ -2575,7 +2422,7 @@ static uint8_t setParameterValue(STR parameterID, char* parameterString) {
         valueFloat = atof(parameterString);
         temporaryInsimulatorOnlyConfigurationSetting[configurationInFocus].minInputValuex100 = valueFloat * 100;
         if (configurationInFocus == configurationActive) {
-            sim_modConfig.minInputValue=valueFloat;
+            modConfig.minInputValue=valueFloat;
             if (sliderStates.sliderSpreadRange != NULL)
                 lv_slider_set_left_value(sliderStates.sliderSpreadRange, valueFloat, LV_ANIM_OFF);
         }
@@ -2587,7 +2434,7 @@ static uint8_t setParameterValue(STR parameterID, char* parameterString) {
         valueFloat = atof(parameterString);
         temporaryInsimulatorOnlyConfigurationSetting[configurationInFocus].maxInputValuex100 = valueFloat * 100;
         if (configurationInFocus == configurationActive) {
-            sim_modConfig.maxInputValue=valueFloat;
+            modConfig.maxInputValue=valueFloat;
             if (sliderStates.sliderSpreadRange!= NULL)
                 lv_slider_set_value(sliderStates.sliderSpreadRange, valueFloat, LV_ANIM_OFF);
         }
@@ -2968,36 +2815,33 @@ void readButtons() {
 
 #if LVGL_PC_SIM
 
-        if(buttonStates.downButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
-            buttonStates.buttons[downKeyIndex].states = LV_INDEV_STATE_PR;
-        else
-            buttonStates.buttons[downKeyIndex].states = LV_INDEV_STATE_REL;
+    if (buttonStates.downButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
+        buttonStates.buttons[downKeyIndex].states = LV_INDEV_STATE_PR;
+    else
+        buttonStates.buttons[downKeyIndex].states = LV_INDEV_STATE_REL;
 
-        if(buttonStates.escButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
-            buttonStates.buttons[escKeyIndex].states = LV_INDEV_STATE_PR;
-        else
-            buttonStates.buttons[escKeyIndex].states = LV_INDEV_STATE_REL;
+    if (buttonStates.escButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
+        buttonStates.buttons[escKeyIndex].states = LV_INDEV_STATE_PR;
+    else
+        buttonStates.buttons[escKeyIndex].states = LV_INDEV_STATE_REL;
 
-        if(buttonStates.enterButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
-            buttonStates.buttons[okKeyIndex].states = LV_INDEV_STATE_PR;
-        else
-            buttonStates.buttons[okKeyIndex].states = LV_INDEV_STATE_REL;
+    if (buttonStates.enterButton->state & LV_STATE_PRESSED) // 2=release, 34=pressed, aber die anderen setzen das auf 0
+        buttonStates.buttons[okKeyIndex].states = LV_INDEV_STATE_PR;
+    else
+        buttonStates.buttons[okKeyIndex].states = LV_INDEV_STATE_REL;
 
-        if (buttonStates.keyIsReleasedForMilliSeconds%1000 == 10) {
-            char buffer[100];
-            debugShowMem();
-            if (memoryUsedDisplay) {
-                sprintf(buffer,"%d", used_size);
-                lv_label_set_text(memoryUsedDisplay, buffer);
-            }
+    if (buttonStates.keyIsReleasedForMilliSeconds % 1000 == 10) {
+        char buffer[100];
+        debugShowMem();
+        if (memoryUsedDisplay) {
+            sprintf(buffer, "%d", used_size);
+            lv_label_set_text(memoryUsedDisplay, buffer);
         }
-#endif
-    /* Check number of changed buttons */
-    for (uint8_t buttonIndex = 0; buttonIndex < HW_BUTTON_COUNT; buttonIndex++) {
-#if BGM13S32F512GA
-        buttonStates.buttons[buttonIndex].states = !(GPIO_PinInGet((GPIO_Port_TypeDef)buttonStates.buttons[buttonIndex].port,buttonStates.buttons[buttonIndex].pin))  ? LV_INDEV_STATE_REL : LV_INDEV_STATE_PR;
-#endif
     }
+#endif
+
+    /* Check number of changed buttons */
+
     for (uint8_t buttonIndex = 0; buttonIndex < HW_BUTTON_COUNT; buttonIndex++) {
 
         if (buttonStates.buttons[buttonIndex].states == LV_INDEV_STATE_PR) {
@@ -3059,48 +2903,7 @@ void readButtons() {
 
 static void initButtons(void) {
 
-    /* Init buttom_queu */
-#if PL_HAS_HMI_BUTTON
 
-#if STM32L1xx
-    buttonStates.buttons[0].pin = BUTTON_ENTER_Pin;
-    buttonStates.buttons[0].port = BUTTON_ENTER_Port;
-    buttonStates.buttons[0].id = LV_KEY_ENTER;
-    buttonStates.buttons[1].pin = BUTTON_NEXT_Pin;
-    buttonStates.buttons[1].port = BUTTON_NEXT_Port;
-    buttonStates.buttons[1].id = LV_KEY_DOWN;
-    buttonStates.buttons[2].pin = BUTTON_ESC_Pin;
-    buttonStates.buttons[2].port = BUTTON_ESC_Port;
-    buttonStates.buttons[2].id = LV_KEY_ESC;
-#endif
-
-#if STM32L0XX
-    buttonStates.buttons[0].pin = GPIO_BUTTON1_Pin;
-    buttonStates.buttons[0].port = GPIO_BUTTON1_GPIO_Port;
-    buttonStates.buttons[0].id = LV_GROUP_KEY_NEXT;
-    buttonStates.buttons[1].pin = GPIO_BUTTON2_Pin;
-    buttonStates.buttons[1].port = GPIO_BUTTON2_GPIO_Port;
-    buttonStates.buttons[1].id = LV_GROUP_KEY_ENTER;
-    buttonStates.buttons[2].pin = GPIO_BUTTON3_Pin;
-    buttonStates.buttons[2].port = GPIO_BUTTON3_GPIO_Port;
-    buttonStates.buttons[2].id = LV_GROUP_KEY_ESC;
-#endif
-#if BGM13S32F512GA
-
-    buttonStates.buttons[0].pin = BUTTON_BACK_Pin;
-    buttonStates.buttons[0].port = BUTTON_BACK_Port;
-    buttonStates.buttons[0].id = LV_KEY_ESC;
-
-    buttonStates.buttons[1].pin = BUTTON_NEXT_Pin;
-    buttonStates.buttons[1].port =BUTTON_NEXT_Port;
-    buttonStates.buttons[1].id = LV_KEY_DOWN;
-
-    buttonStates.buttons[2].pin = BUTTON_OK_Pin;
-    buttonStates.buttons[2].port = BUTTON_OK_Port;
-    buttonStates.buttons[2].id = LV_KEY_ENTER;
-#endif
-
-#endif
     btnPort = 0xFFFF;
     for (uint8_t i = 0; i < HW_BUTTON_COUNT; i++) {
         buttonStates.buttons[i].buttonPCStates =LV_INDEV_STATE_REL;
@@ -3377,7 +3180,7 @@ static void initDeviceConfigurationAndArchiveArrays() {
                strcpy(temporaryInsimulatorOnlyConfigurationSetting[0].configName,getMenuOrParameterNameFromMenuDefinitions(CONFIGURATIONX));
                for (int8_t index = 1; index < NUMBER_OF_NEWCONFIGURATIONS; index ++) {
                    strcpy(temporaryInsimulatorOnlyConfigurationSetting[index].configName,getMenuOrParameterNameFromMenuDefinitions(NAMEFORNEWCONFIG));
-                   temporaryInsimulatorOnlyConfigurationSetting[index].status = arrayUninitialized;
+                   temporaryInsimulatorOnlyConfigurationSetting[index].status = arrayVisibleDefaultName;
                }
                temporaryInsimulatorOnlyConfigurationSetting[0].status = arrayVisibleRenamed;
                temporaryInsimulatorOnlyConfigurationSetting[1].status = arrayVisibleDefaultName;
@@ -5720,29 +5523,29 @@ static void deactivateCheckSymbolInList(lv_obj_t * oldfocusedButton){
 /**
  * @brief Mark the stored value in the singlechooselist
  */
-static int8_t insertSingleCheckSymbolIntoList(lv_obj_t * focusedButton, int8_t defaultStateOnInit){
+static int8_t insertSingleCheckSymbolIntoList(lv_obj_t* focusedButton, int8_t defaultStateOnInit) {
     // Mark the stored values in the list
-    int8_t checkMarkSet;
+    int8_t checkMarkSet=0;
     lv_obj_t* checkMarkSymbol;
 
-    if (focusedButton->user_data==NULL){
+    if (focusedButton->user_data == NULL) {
         checkMarkSymbol = lv_label_create(focusedButton);
-        focusedButton->user_data=checkMarkSymbol;
+        focusedButton->user_data = checkMarkSymbol;
 
         lv_obj_align(checkMarkSymbol, LV_TEXT_ALIGN_RIGHT, 0, -20);
 
-       lv_obj_add_style(checkMarkSymbol, &style_symbol,0);
-       lv_obj_add_style(checkMarkSymbol, &style_symbol_focused,LV_STATE_FOCUSED);
-        if (defaultStateOnInit!=0)
+        lv_obj_add_style(checkMarkSymbol, &style_symbol, 0);
+        lv_obj_add_style(checkMarkSymbol, &style_symbol_focused, LV_STATE_FOCUSED);
+        if (defaultStateOnInit != 0)
             lv_label_set_text(checkMarkSymbol, LV_SYMBOL_NAMUR_CHECKED);
         else
             lv_label_set_text(checkMarkSymbol, LV_SYMBOL_NAMUR_UNCHECKED);
     }
-    else{
-        checkMarkSymbol=focusedButton->user_data;
-        char* checkMarkText= lv_label_get_text(checkMarkSymbol);
+    else {
+        checkMarkSymbol = focusedButton->user_data;
+        char* checkMarkText = lv_label_get_text(checkMarkSymbol);
         /* Toggle state of checkmark */
-        if (strcmp(checkMarkText,LV_SYMBOL_NAMUR_CHECKED)!=0){
+        if (strcmp(checkMarkText, LV_SYMBOL_NAMUR_CHECKED) != 0) {
             lv_label_set_text(checkMarkSymbol, LV_SYMBOL_NAMUR_CHECKED);
             checkMarkSet = 1;
         }
@@ -6152,44 +5955,6 @@ static void initDefaultScreenValueAndUnitPositions(nodeDescriptor_t *screenNode)
         else {
             /* Nothing to do */
         }
-    }
-}
-
-static void AquaHMI_printNamurSymbolsFromNamurState(lv_obj_t *nodeOb,
-        namurBitFieldPos_t namurState) {
-    //    char* string[4]={0,0,0,0};
-    if (nodeOb == NULL) {
-        return;
-    }
-    switch (namurState) {
-    case namurFault:
-        //        string=LV_SYMBOL_NAMUR_V2_FAULT;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_FAULT);
-        break;
-    case namurOutOfRange:
-        //        string=LV_SYMBOL_NAMUR_V2_OUT_OF_RANGE;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_OUT_OF_RANGE);
-        break;
-    case namurMaintenence:
-        //        string=LV_SYMBOL_NAMUR_V2_MAINTENENCE;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_MAINTENENCE);
-        break;
-    case namurCheck:
-        //        string=LV_SYMBOL_NAMUR_V2_CHECK;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_CHECK);
-        break;
-    case namurChecked:
-        //        string=LV_SYMBOL_NAMUR_V2_CHECKED;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_CHECKED);
-        break;
-    case namurUnchecked:
-        //        string=LV_SYMBOL_NAMUR_V2_UNCHECKED;
-        lv_label_set_text(nodeOb, LV_SYMBOL_NAMUR_V2_UNCHECKED);
-        break;
-
-    default:
-
-        break;
     }
 }
 
@@ -6845,61 +6610,6 @@ static void AquaHMI_Init_Timer(void) {
 
     //setup count down variable
 
-#if STM32L0XX
-    runTask = RUN_TASK_MS;
-    LL_TIM_InitTypeDef TIM_InitStruct;
-    /* Enable the timer peripheral clock */
-
-    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM7);
-
-    /* Configure the NVIC to handle TIM2 update interrupt */
-    NVIC_SetPriority(TIM7_IRQn, 7);
-    NVIC_EnableIRQ(TIM7_IRQn);
-
-    TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-    TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV2;
-    /* Set the auto-reload value to have an initial update event frequency of 1000 Hz */
-    TIM_InitStruct.Autoreload = __LL_TIM_CALC_ARR(SystemCoreClock, LL_TIM_GetPrescaler(TIM7), 1000);
-
-    LL_TIM_Init(TIM7, &TIM_InitStruct);
-
-    LL_TIM_SetClockSource(TIM7, LL_TIM_CLOCKSOURCE_INTERNAL);
-
-    LL_TIM_ClearFlag_UPDATE(TIM7);
-
-    /* Enable the update interrupt */
-    LL_TIM_EnableIT_UPDATE(TIM7);
-#endif
-
-#if defined(STM32L1xx)
-    LL_TIM_InitTypeDef TIM_InitStruct;
-    /* Enable the timer peripheral clock */
-
-    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
-
-    /* Configure the NVIC to handle TIM3 update interrupt */
-    NVIC_SetPriority(TIM3_IRQn, 6);
-    NVIC_EnableIRQ(TIM3_IRQn);
-
-    TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-    TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
-    /* Set the auto-reload value to have an initial update event frequency of 1000 Hz */
-    TIM_InitStruct.Autoreload = __LL_TIM_CALC_ARR(SystemCoreClock, LL_TIM_GetPrescaler(TIM3), 1000);
-
-    LL_TIM_Init(TIM3, &TIM_InitStruct);
-
-    LL_TIM_SetClockSource(TIM3, LL_TIM_CLOCKSOURCE_INTERNAL);
-
-    LL_TIM_ClearFlag_UPDATE(TIM3);
-
-    /* Enable the update interrupt */
-    LL_TIM_EnableIT_UPDATE(TIM3);
-#endif
-
-#if BGM13S32F512GA
-    runTask = RUN_TASK_MS;
-
-#endif
 }
 
 

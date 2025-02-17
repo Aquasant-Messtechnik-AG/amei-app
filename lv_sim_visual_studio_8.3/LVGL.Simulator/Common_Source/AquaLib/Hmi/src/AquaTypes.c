@@ -1,4 +1,4 @@
- /**
+﻿ /**
   ******************************************************************************
   * @file 	AquaTypes.c
   * @author 	Schaer Manuel
@@ -136,69 +136,6 @@ volatile uint8_t idCounter;
 }
 
 
-
-
-///**
-//* @brief Hardware support for CRC generation
-// * @param *dataPtrSrc A Pointer to the input(source) data
-// * @param numOfBytes Length of data for CRC processing
-// * @param CRCValue* Pointer to the destination
-// * @return UnitState Returns OK if successfully else ERR
-//*/
-//UnitState AquaTypesCalcCRC(void* dataPtrSrc, uint16_t numOfBytes, uint32_t* CRCValue){
-//	// Calculate CRC of staticStruct
-//#if STM32L073xx
-//if(!LL_AHB1_GRP1_IsEnabledClock(LL_AHB1_GRP1_PERIPH_CRC)){
-//	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_CRC);
-//	if(LL_AHB1_GRP1_IsEnabledClock(LL_AHB1_GRP1_PERIPH_CRC)){
-//		uint8_t* dataPtr=(uint8_t*)dataPtrSrc;
-//		LL_CRC_ResetCRCCalculationUnit(CRC);
-//		uint16_t length=numOfBytes;/*size minus the crc32 at the end, IN WORAquaTypesSetCurState(&localAppStruct->instance,IDLE);DS*/
-//		uint16_t i = 0;
-//		for(i = 0; i < length/4; i++){
-//		LL_CRC_FeedData32(CRC, (uint32_t)*dataPtr);
-//		dataPtr+=4;
-//		}
-//		  /* Last bytes specific handling */
-//		  if ((length % 4) != 0)
-//		  {
-//		    if  (length % 4 == 1)
-//		    {
-//		      LL_CRC_FeedData8(CRC, (uint8_t)*dataPtr);
-//		      dataPtr=0;
-//		    }
-//		    if  (length % 4 == 2)
-//		    {
-//		      LL_CRC_FeedData16(CRC, (uint16_t)*dataPtr);
-//		      dataPtr=0;
-//		    }
-//		    if  (length % 4 == 3)
-//		    {
-//		      LL_CRC_FeedData16(CRC, (uint16_t)*dataPtr);
-//		      dataPtr+=2;
-//		      LL_CRC_FeedData8(CRC, (uint8_t)*dataPtr);
-//		      dataPtr=0;
-//		    }
-//	}
-//	*CRCValue=LL_CRC_ReadData32(CRC);
-//	LL_AHB1_GRP1_DisableClock(LL_AHB1_GRP1_PERIPH_CRC);
-//	return OK;
-//	}else{
-//		LL_AHB1_GRP1_DisableClock(LL_AHB1_GRP1_PERIPH_CRC);
-//		return FAIL;
-//	}
-//}
-//#endif
-//return FAIL;
-//}
-
-
-
-
-
-
-
-
  uint8_t AquaType_compare_MeasCfg(measConfigDataStruct_t* cfg1, measConfigDataStruct_t* cfg2){
 
 	uint8_t diff=0;
@@ -329,4 +266,3 @@ volatile uint8_t idCounter;
 
  }
 
- 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file lv_conf.h
  * Configuration file for v8.3.10
  */
@@ -10,7 +10,7 @@
 #define LV_CONF_H
 
 #include <stdint.h>
-#include "RTE_Components.h"
+
 
 /*====================
    COLOR SETTINGS

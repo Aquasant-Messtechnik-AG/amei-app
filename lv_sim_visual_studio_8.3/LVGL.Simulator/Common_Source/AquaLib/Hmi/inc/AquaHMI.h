@@ -49,6 +49,20 @@ extern "C" {
 #define NUMBER_OF_MEDIUMS                  3
 #define NUMBER_OF_NEWCONFIGURATIONS        2
 
+    // for convertion https://www.cogsci.ed.ac.uk/~richard/utf-8.cgi?input=f4c9&mode=hex
+#define LV_SYMBOL_NAMUR_CHECKED   "\xef\x93\x89" /*62665, 0xF4c9*/
+#define LV_SYMBOL_NAMUR_UNCHECKED   "\xef\x93\x8A" /*62666, 0xF4ca*/
+#define LV_SYMBOL_NAMUR_FAULT   "\xef\x93\x88" /*62664, 0xF4c8*/
+#define LV_SYMBOL_NAMUR_CHECK   "\xef\x93\x87" /*62663, 0xF4c7*/
+#define LV_SYMBOL_NAMUR_OUT_OF_RANGE   "\xef\x93\x86" /*62662, 0xF4c6*/
+#define LV_SYMBOL_NAMUR_MAINTENENCE   "\xef\x93\x85" /*62661, 0xF4c5*/
+
+#define LV_SYMBOL_NAMUR_V2_CHECKED   "\xef\x92\x9C" /*62665, 0xF4c9*/
+#define LV_SYMBOL_NAMUR_V2_UNCHECKED   "\xef\x92\x9D" /*62666, 0xF4ca*/
+#define LV_SYMBOL_NAMUR_V2_FAULT   "\xef\x92\x9B" /*62664, 0xF4c8*/
+#define LV_SYMBOL_NAMUR_V2_CHECK   "\xef\x92\x9A" /*62663, 0xF4c7*/
+#define LV_SYMBOL_NAMUR_V2_OUT_OF_RANGE   "\xef\x92\x99" /*62662, 0xF4c6*/
+#define LV_SYMBOL_NAMUR_V2_MAINTENENCE   "\xef\x92\x98" /*62661, 0xF4c5*/
 
 /**
  * Contact text
